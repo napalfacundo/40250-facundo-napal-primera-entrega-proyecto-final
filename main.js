@@ -17,6 +17,13 @@ createCatBtn.addEventListener("click", () => {
   console.log(categories);
   createTileConfirm = confirm('Create another?') 
 } while(createTileConfirm == true)
+
+const select = document.getElementById('selectCategory')
+categories.forEach(category => {
+    let option = document.createElement('option')
+    option.innerHTML = category
+    select.appendChild(option)
+});
 });
 
 deleteCatBtn.addEventListener("click", () => {
