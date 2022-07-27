@@ -1,3 +1,53 @@
+/**
+ * HELPERS
+ */
+
+/**
+ * Card component
+ * @param {tileImg, tileName, tileUrl, tileCategory} props 
+ * @returns string
+ */
+const Card = (props) => {
+  const { tileImg, tileName, tileUrl, tileCategory } = props;
+
+  return `
+      <div class="card">
+        <img class="tile-img" src="${tileImg}">
+        <h1 class="title">${tileName}</h1>
+        <p class="tile-url">${tileUrl}</p>
+        <p>${tileCategory}</p>
+
+        <button class="actionBtn">
+          <a href="${tileUrl}" target="_blank">Go</a>
+        </button>
+    </div>`;
+}
+
+/**
+ * facu engine
+ */
+
+const facuEngine = (elementWrapper) => {
+
+  let elementToRenderOn;
+
+  const renderApi = {
+    to: (tagName) => {
+      elementToRenderOn = document.createElement(tagName);
+      return renderApi;
+    },
+    render: (contentToRender) => {
+      elementToRenderOn.innerHTML = contentToRender;
+      elementWrapper.appendChild(elementToRenderOn);
+    }
+  }
+
+  return renderApi;
+} 
+  
+
+
+
 const form = document.getElementById("form");
 const container = document.getElementById("container");
 const createCatBtn = document.getElementById("createCategory");
@@ -65,14 +115,13 @@ createTileBtn.addEventListener("click", (event) => {
   const tileImg = document.getElementById("tileImg").value;
   const tileLike = document.querySelector('[name="like"]').checked;
 
-  const newTileDiv = document.createElement("div");
 
   let newTile = {
     tileName: tileName,
     titleUrl: document.getElementById("tileUrl").value,
-    category: tileCategory,
+    tileCategory: tileCategory,
     tileImg: tileImg,
-    like: tileLike,
+    tileLike: tileLike,
     id: id++,
   };
 
@@ -80,15 +129,10 @@ createTileBtn.addEventListener("click", (event) => {
   tilesList.push(newTile);
   console.log(tilesList);
 
-  newTileDiv.innerHTML = `
-    <div class="card">
-    <img class="tile-img" src="${tileImg}">
-    <h1 class="title">${tileName}</h1>
-    <p class="tile-url">${tileUrl}</p>
-    <p>${tileCategory}</p>
-  
-  <button class="actionBtn"><a href="${tileUrl}" target="_blank">Go</a></button>
-  </div>
-  `;
-  container.appendChild(newTileDiv);
+  facuEngine(container)
+    .to("div")
+    .render(Card(newTile))
+
 });
+
+
