@@ -24,10 +24,10 @@ const Card = (props) => {
 }
 
 /**
- * facu engine
+ * Render engine
  */
 
-const facuEngine = (elementWrapper) => {
+const renderEngine = (elementWrapper) => {
 
   let elementToRenderOn;
 
@@ -69,10 +69,23 @@ createCatBtn.addEventListener("click", () => {
 } while(createTileConfirm == true)
 
 const select = document.getElementById('selectCategory')
+const categoriesAside = document.getElementById('categoriesAside')
 categories.forEach(category => {
-    let option = document.createElement('option')
-    option.innerHTML = category
-    select.appendChild(option)
+    // let option = document.createElement('option')
+    // option.innerHTML = category
+    // select.appendChild(option)
+
+    renderEngine(select)
+        .to('option')
+        .render(category)
+
+    // let asideItem = document.createElement('li')
+    // asideItem.innerHTML = category
+    // categoriesAside.appendChild(asideItem)
+
+    renderEngine(categoriesAside)
+        .to('li')
+        .render(category)
 });
 });
 
@@ -97,9 +110,15 @@ showCatBtn.addEventListener("click", () => {
   catTable.innerHTML = 'Categories:'
   categories.forEach((category) => {
     let catTableRow = document.createElement("tr");
-    let cat = document.createElement("td");
-    cat.innerHTML = category;
-    catTableRow.appendChild(cat);
+
+    
+    // let cat = document.createElement("td");
+    // cat.innerHTML = category;
+    // catTableRow.appendChild(cat);
+    
+    renderEngine(catTableRow)
+        .to('td')
+        .render(category)
 
     catTable.appendChild(catTableRow);
     container.appendChild(catTable);
@@ -129,7 +148,7 @@ createTileBtn.addEventListener("click", (event) => {
   tilesList.push(newTile);
   console.log(tilesList);
 
-  facuEngine(container)
+  renderEngine(container)
     .to("div")
     .render(Card(newTile))
 

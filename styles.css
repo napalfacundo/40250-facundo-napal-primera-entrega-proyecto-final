@@ -473,10 +473,9 @@ there.
 
 
 
-/* #container {
-    display: inline-grid;
-    grid: 1fr 1fr 1fr 1fr;
-} */
+#container {
+    display: flex;
+}
 
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -520,4 +519,15 @@ there.
 
   .tile-url {
     width: 100%;
+  }
+
+  /* Categories */
+
+  .categories__aside {
+    position: absolute;
+    right: 6%;
+    top: 11%;
+    border: 2px solid;
+    width: 10rem;
+    padding: 1rem;
   }

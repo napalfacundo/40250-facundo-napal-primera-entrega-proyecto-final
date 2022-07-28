@@ -22,11 +22,7 @@
         <input type="text" name="tileUrl" id="tileUrl" placeholder="URL"> 
 
         <label for="selectCategory"></label>
-        <select name="selectCategory" id="selectCategory">
-            <option>Cat 1</option>
-            <option>Cat 2</option>
-            <option>Cat 3</option>
-        </select>
+        <select name="selectCategory" id="selectCategory"></select>
         
         
         <input type="text" name="tileImg" id="tileImg" placeholder="Paste image URL">
@@ -37,6 +33,10 @@
         <!-- <input type="button" value="click" name="button" id="sub"> -->
         <button id="createButton">Create Tile</button>
         <div id="container"></div>
+        <aside class="categories__aside">
+            <div class="categories__aside--title">Categories:</div>
+            <ul id="categoriesAside"></ul>
+        </aside>
     </form>
 </body>
 </html>
