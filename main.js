@@ -1,157 +1,266 @@
 /**
+ * 
+ * Save data in local storage 
+ * Style card and menus
+ * 
+ */
+
+/**
  * HELPERS
  */
+ const removeItemFromArr = (arr, item) => {
+  let i = arr.indexOf(item);
+  i !== -1 && arr.splice(i, 1);
+};
 
 /**
- * Card component
- * @param {tileImg, tileName, tileUrl, tileCategory} props 
- * @returns string
- */
+* Card component
+* @param {tileImg, tileName, tileUrl, tileCategory} props
+* @returns string
+*/
 const Card = (props) => {
-  const { tileImg, tileName, tileUrl, tileCategory } = props;
+  const { tileImg, tileName, tileUrl, tileCategory, tileDate } = props;
 
   return `
-      <div class="card">
-        <img class="tile-img" src="${tileImg}">
-        <h1 class="title">${tileName}</h1>
-        <p class="tile-url">${tileUrl}</p>
-        <p>${tileCategory}</p>
+    <div class="tileCard">
+      <img class="tile-img" src="${tileImg}">
+      <h1 class="title">${tileName}</h1>
+      <p class="tile-url">${tileUrl}</p>
+      <p>${tileCategory}</p>
+      <p>${tileDate}</p>
+      
 
-        <button class="actionBtn">
-          <a href="${tileUrl}" target="_blank">Go</a>
-        </button>
-    </div>`;
-}
+      <button class="actionBtn">
+        <a href="${tileUrl}" target="_blank">Go</a>
+      </button>
+  </div>`;
+};
 
 /**
- * Render engine
- */
+* Render engine
+*/
 
 const renderEngine = (elementWrapper) => {
-
   let elementToRenderOn;
 
   const renderApi = {
-    to: (tagName) => {
-      elementToRenderOn = document.createElement(tagName);
-      return renderApi;
-    },
-    render: (contentToRender) => {
-      elementToRenderOn.innerHTML = contentToRender;
-      elementWrapper.appendChild(elementToRenderOn);
-    }
-  }
+      to: (tagName) => {
+          elementToRenderOn = document.createElement(tagName);
+          return renderApi;
+      },
+
+      render: (contentToRender, attr, attrName) => {
+          elementToRenderOn.innerHTML = contentToRender;
+          elementToRenderOn.setAttribute(attr, attrName);
+          elementWrapper.appendChild(elementToRenderOn);
+      },
+  };
 
   return renderApi;
-} 
-  
+};
 
+/**
+* VARIABLES
+*/
+let catList = []; // category list
+const root = document.getElementById("root"); // capturing root element
+let catMenu = document.createElement("menu"); // creating category buttons catMenu
 
+let catListContainer = document.createElement("container");
+catListContainer.setAttribute("id", "catListContainer");
 
-const form = document.getElementById("form");
-const container = document.getElementById("container");
-const createCatBtn = document.getElementById("createCategory");
-const deleteCatBtn = document.getElementById("deleteCategory");
-const showCatBtn = document.getElementById("showCategory");
-const createTileBtn = document.getElementById("createButton");
-let tilesList = [];
-let categories = [];
-let id = 0;
+let catListContainerList = document.createElement("ul");
+catListContainer.appendChild(catListContainerList);
+root.appendChild(catListContainer);
+
+/**
+* CATEGORIES catMenu
+*/
+renderEngine(catMenu)
+  .to("button")
+  .render("Create Category", "id", "createCatBtn");
+
+renderEngine(catMenu)
+  .to("button")
+  .render("Delete Category", "id", "deleteCatBtn");
+
+renderEngine(catMenu)
+  .to("button")
+  .render("Show Category", "id", "showCatBtn");
+
+root.appendChild(catMenu);
 
 createCatBtn.addEventListener("click", () => {
-  let createTileConfirm = true
-  do {
-  let newCat = prompt("Type new Category name");
-  categories.push(newCat);
-  alert(`New ${newCat} category added`);
-  console.log(categories);
-  createTileConfirm = confirm('Create another?') 
-} while(createTileConfirm == true)
+  renderEngine(root)
+      .to("dialog")
+      .render(
+          `
+<input type="text" id="createCatInput" placeholder="Type new Category">
+  <span>
+  <button id="createCatBtnDialog">Ok</button>
+  <button id="cancelCreateCatBtn">Cancel</button>`,
+          "id",
+          "createCatDialog"
+      );
 
-const select = document.getElementById('selectCategory')
-const categoriesAside = document.getElementById('categoriesAside')
-categories.forEach(category => {
-    // let option = document.createElement('option')
-    // option.innerHTML = category
-    // select.appendChild(option)
+  let createCatDialog = document.getElementById("createCatDialog");
 
-    renderEngine(select)
-        .to('option')
-        .render(category)
+  let cancelCreateCatBtn = document.getElementById("cancelCreateCatBtn");
+  cancelCreateCatBtn.addEventListener("click", () => {
+      createCatDialog.close();
+      root.removeChild(createCatDialog);
+  });
 
-    // let asideItem = document.createElement('li')
-    // asideItem.innerHTML = category
-    // categoriesAside.appendChild(asideItem)
+  createCatDialog.showModal();
 
-    renderEngine(categoriesAside)
-        .to('li')
-        .render(category)
-});
+  let createCatBtnDialog = document.getElementById("createCatBtnDialog");
+  
+  createCatBtnDialog.addEventListener("click", () => {
+      let createCatInput = document.getElementById("createCatInput").value;
+      console.log(createCatInput);
+      catList.push(createCatInput);
+      catListContainerList.innerHTML = `Categories: <li>${catList}</li>`;
+      // localStorage.setItem('Categories', JSON.stringify(catList))
+      console.log(catList);
+      createCatDialog.close();
+      root.removeChild(createCatDialog);
+  });
 });
 
 deleteCatBtn.addEventListener("click", () => {
-  console.log(`CATEGORIES:
-  ${categories}`);
-  let toDeleteCat = prompt("Type which Category delete");
-  const removeItemFromArr = (arr, item) => {
-    let i = arr.indexOf(item);
-    i !== -1 && arr.splice(i, 1);
-  };
-  removeItemFromArr(categories, toDeleteCat);
-  console.log(`
-  Category ${toDeleteCat} has been succesfully deleted. 
-  CATEGORIES:
-  ${categories}
-  `);
+  renderEngine(root)
+      .to("dialog")
+      .render(
+          `
+          <span id="categoriesSpanList">Categories: ${catList}
+          <input type="text" id="deleteCatInput" placeholder="Delete Category">
+          <button id="deleteCatBtnDialog">Ok</button>
+          <button id="cancelDeleteCatBtn">Cancel</button>
+          `,
+          "id",
+          "deleteCatDialog"
+      );
+  
+  let deleteCatDialog = document.getElementById('deleteCatDialog')
+
+  let cancelDeleteCatBtn = document.getElementById("cancelDeleteCatBtn");
+  cancelDeleteCatBtn.addEventListener("click", () => {
+      deleteCatDialog.close();
+      root.removeChild(deleteCatDialog);
+  });
+
+  
+  deleteCatDialog.showModal();
+  
+  let deleteCatBtnDialog = document.getElementById("deleteCatBtnDialog");
+  console.log(deleteCatBtnDialog);
+  
+  deleteCatBtnDialog.addEventListener("click", () => {
+      let deleteCatInput = document.getElementById("deleteCatInput").value;
+      
+      removeItemFromArr(catList, deleteCatInput);
+
+      let categoriesSpanList = document.getElementById("categoriesSpanList");
+      categoriesSpanList.innerHTML = `Categories: ${catList}`;
+      catListContainerList.innerHTML = `Categories: <li>${catList}</li>`;
+      deleteCatDialog.close();
+      root.removeChild(deleteCatDialog);
+  });
 });
 
 showCatBtn.addEventListener("click", () => {
-  let catTable = document.createElement("table");
-  catTable.innerHTML = 'Categories:'
-  categories.forEach((category) => {
-    let catTableRow = document.createElement("tr");
+  renderEngine(root)
+      .to("dialog")
+      .render(
+          `
+<div id="showCatContainer">
+     Categories:
+     ${catList}
+  </div>
+  <button id="okShowButton">OK</button>
+  `,
+          "id",
+          "showCatDialog"
+      );
 
-    
-    // let cat = document.createElement("td");
-    // cat.innerHTML = category;
-    // catTableRow.appendChild(cat);
-    
-    renderEngine(catTableRow)
-        .to('td')
-        .render(category)
-
-    catTable.appendChild(catTableRow);
-    container.appendChild(catTable);
+  showCatDialog.showModal();
+  let okShowButton = document.getElementById("okShowButton");
+  okShowButton.addEventListener("click", () => {
+      showCatDialog.close();
+      root.removeChild(showCatDialog);
   });
-  console.table(categories)
 });
 
-createTileBtn.addEventListener("click", (event) => {
-  event.preventDefault();
-  const tileName = document.getElementById("tileName").value;
-  const tileUrl = document.getElementById("tileUrl").value;
-  const tileCategory = document.getElementById("selectCategory").value;
-  const tileImg = document.getElementById("tileImg").value;
-  const tileLike = document.querySelector('[name="like"]').checked;
+/**
+* TILES MENU
+*/
+let id = 0;
 
+let tilesMenu = document.createElement("menu"); // creating tiles buttons menu
 
-  let newTile = {
-    tileName: tileName,
-    titleUrl: document.getElementById("tileUrl").value,
-    tileCategory: tileCategory,
-    tileImg: tileImg,
-    tileLike: tileLike,
-    id: id++,
-  };
+renderEngine(tilesMenu)
+  .to("button")
+  .render("Create Tile", "id", "createTileBtn");
 
-  form.reset();
-  tilesList.push(newTile);
-  console.log(tilesList);
+root.appendChild(tilesMenu);
 
-  renderEngine(container)
-    .to("div")
-    .render(Card(newTile))
+let createTileBtn = document.getElementById("createTileBtn");
+createTileBtn.addEventListener("click", () => {
+  renderEngine(root)
+      .to("dialog")
+      .render(
+          `
+          <label for="tileName">Name:</label>
+          <input type="text" name="tileName" id="tileName" placeholder="Name">
 
+          <label for="tileUrl">URL:</label>
+          <input type="text" name="tileUrl" id="tileUrl" placeholder="URL"> 
+
+          <label for="selectCategory"></label>
+          <select name="selectCategory" id="selectCategory"></select>
+          
+          
+          <input type="text" name="tileImg" id="tileImg" placeholder="Paste image URL">
+
+          <label for="like">Like</label>
+          👍<input type="radio" name="like" value="like">
+          👎<input type="radio" name="like" value="unlike">
+          <button id="createTileBtnDialog">Create Tile</button>
+          <button id="cancelTileBtn">Cancel</button>
+        `,
+          "id",
+          "createTileDialog"
+      );
+  let createTileDialog = document.getElementById("createTileDialog")
+  
+  let cancelTileBtn = document.getElementById("cancelTileBtn")
+  cancelTileBtn.addEventListener('click', () => {
+      createTileDialog.close();
+      root.removeChild(createTileDialog)
+  })
+
+  createTileDialog.showModal();
+
+  let createTileBtnDialog = document.getElementById("createTileBtnDialog");
+  createTileBtnDialog.addEventListener("click", () => {
+      const tileName = document.getElementById("tileName").value;
+      const tileUrl = document.getElementById("tileUrl").value;
+      const tileCategory = document.getElementById("selectCategory").value;
+      const tileImg = document.getElementById("tileImg").value;
+      const tileLike = document.querySelector('[name="like"]').checked;
+      let date = new Date().toDateString();
+
+      let newTile = {
+          tileName: tileName,
+          titleUrl: tileUrl,
+          tileCategory: tileCategory,
+          tileImg: tileImg,
+          tileLike: tileLike,
+          tileDate: date,
+          id: id++,
+      };
+      renderEngine(root).to("div").render(Card(newTile));
+      createTileDialog.close()
+      root.removeChild(createTileDialog)
+  });
 });
-
-

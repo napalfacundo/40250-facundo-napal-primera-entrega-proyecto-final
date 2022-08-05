@@ -5,39 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer type="text/javascript" src="main.js"></script>
+    <script defer src="main.js"></script>
 </head>
 <body>
-    <navbar>
-        <button class="navbarBtn" id="createCategory">Create Category</button>
-        <button class="navbarBtn" id="deleteCategory">Delete Category</button>
-        <button class="navbarBtn" id="showCategory">Show Category</button>
-    </navbar>
-    <form id="form" >
-        <label for="tileName">Name:</label>
-        <input type="text" name="tileName" id="tileName" placeholder="Name">
-
-        <label for="tileUrl">URL:</label>
-        <input type="text" name="tileUrl" id="tileUrl" placeholder="URL"> 
-
-        <label for="selectCategory"></label>
-        <select name="selectCategory" id="selectCategory"></select>
-        
-        
-        <input type="text" name="tileImg" id="tileImg" placeholder="Paste image URL">
-
-        <label for="like">Like</label>
-        👍<input type="radio" name="like" value="like">
-        👎<input type="radio" name="like" value="unlike">
-        <!-- <input type="button" value="click" name="button" id="sub"> -->
-        <button id="createButton">Create Tile</button>
-        <div id="container"></div>
-        <aside class="categories__aside">
-            <div class="categories__aside--title">Categories:</div>
-            <ul id="categoriesAside"></ul>
-        </aside>
-    </form>
+    <div id="root"></div>
 </body>
 </html>
-
