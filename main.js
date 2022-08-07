@@ -1,5 +1,5 @@
 /**
- * 
+ * TODO:
  * Save data in local storage 
  * Style card and menus
  * 
@@ -44,14 +44,14 @@ const renderEngine = (elementWrapper) => {
   let elementToRenderOn;
 
   const renderApi = {
-      to: (tagName) => {
+      to: (tagName, attr, attrName) => {
           elementToRenderOn = document.createElement(tagName);
+          elementToRenderOn.setAttribute(attr, attrName);
           return renderApi;
       },
 
-      render: (contentToRender, attr, attrName) => {
+      render: (contentToRender) => {
           elementToRenderOn.innerHTML = contentToRender;
-          elementToRenderOn.setAttribute(attr, attrName);
           elementWrapper.appendChild(elementToRenderOn);
       },
   };
@@ -77,30 +77,28 @@ root.appendChild(catListContainer);
 * CATEGORIES catMenu
 */
 renderEngine(catMenu)
-  .to("button")
-  .render("Create Category", "id", "createCatBtn");
+  .to("button", "id", "createCatBtn")
+  .render("Create Category");
 
 renderEngine(catMenu)
-  .to("button")
-  .render("Delete Category", "id", "deleteCatBtn");
+  .to("button", "id", "deleteCatBtn")
+  .render("Delete Category");
 
 renderEngine(catMenu)
-  .to("button")
-  .render("Show Category", "id", "showCatBtn");
+  .to("button", "id", "showCatBtn")
+  .render("Show Category");
 
 root.appendChild(catMenu);
 
 createCatBtn.addEventListener("click", () => {
   renderEngine(root)
-      .to("dialog")
+      .to("dialog", "id", "createCatDialog")
       .render(
           `
 <input type="text" id="createCatInput" placeholder="Type new Category">
   <span>
   <button id="createCatBtnDialog">Ok</button>
-  <button id="cancelCreateCatBtn">Cancel</button>`,
-          "id",
-          "createCatDialog"
+  <button id="cancelCreateCatBtn">Cancel</button>`
       );
 
   let createCatDialog = document.getElementById("createCatDialog");
@@ -129,16 +127,14 @@ createCatBtn.addEventListener("click", () => {
 
 deleteCatBtn.addEventListener("click", () => {
   renderEngine(root)
-      .to("dialog")
+      .to("dialog", "id", "deleteCatDialog")
       .render(
           `
           <span id="categoriesSpanList">Categories: ${catList}
           <input type="text" id="deleteCatInput" placeholder="Delete Category">
           <button id="deleteCatBtnDialog">Ok</button>
           <button id="cancelDeleteCatBtn">Cancel</button>
-          `,
-          "id",
-          "deleteCatDialog"
+          `
       );
   
   let deleteCatDialog = document.getElementById('deleteCatDialog')
@@ -170,17 +166,15 @@ deleteCatBtn.addEventListener("click", () => {
 
 showCatBtn.addEventListener("click", () => {
   renderEngine(root)
-      .to("dialog")
+      .to("dialog", "id", "showCatDialog")
       .render(
-          `
-<div id="showCatContainer">
-     Categories:
-     ${catList}
-  </div>
-  <button id="okShowButton">OK</button>
-  `,
-          "id",
-          "showCatDialog"
+      `
+      <div id="showCatContainer">
+          Categories:
+          ${catList}
+          </div>
+          <button id="okShowButton">OK</button>
+      `
       );
 
   showCatDialog.showModal();
@@ -199,15 +193,15 @@ let id = 0;
 let tilesMenu = document.createElement("menu"); // creating tiles buttons menu
 
 renderEngine(tilesMenu)
-  .to("button")
-  .render("Create Tile", "id", "createTileBtn");
+  .to("button", "id", "createTileBtn")
+  .render("Create Tile");
 
 root.appendChild(tilesMenu);
 
 let createTileBtn = document.getElementById("createTileBtn");
 createTileBtn.addEventListener("click", () => {
   renderEngine(root)
-      .to("dialog")
+      .to("dialog", "id", "createTileDialog")
       .render(
           `
           <label for="tileName">Name:</label>
@@ -227,9 +221,7 @@ createTileBtn.addEventListener("click", () => {
           👎<input type="radio" name="like" value="unlike">
           <button id="createTileBtnDialog">Create Tile</button>
           <button id="cancelTileBtn">Cancel</button>
-        `,
-          "id",
-          "createTileDialog"
+        `
       );
   let createTileDialog = document.getElementById("createTileDialog")
   
