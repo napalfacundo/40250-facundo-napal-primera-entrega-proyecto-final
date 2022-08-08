@@ -4,12 +4,16 @@
   max-width: 104px  ;
   border: 1px solid;
   padding: 48px;
-  margin: 100px;
+  /* margin: 100px; */
   justify-content: center;
   align-items: center;
   padding-top: unset;
 }
 
 .tile-img {
-  min-width: 128%;
+  min-width: 169px;
+}
+
+#tilesContainer {
+  display: flex;
 }

@@ -1,8 +1,10 @@
 /**
  * TODO:
- * Save data in local storage
+ * Save tileList in local storage
  * Style card and menus
- *
+ * Go further on tiles CRUD
+ * Improve categories
+ * 
  */
 
 /**
@@ -232,6 +234,9 @@ root.appendChild(tilesMenu);
 
 let createTileBtn = document.getElementById("createTileBtn");
 
+let tilesContainer = document.createElement('div')
+tilesContainer.setAttribute('id', 'tilesContainer')
+root.appendChild(tilesContainer)
 
 createTileBtn.addEventListener("click", () => {
     renderEngine(root)
@@ -265,6 +270,8 @@ createTileBtn.addEventListener("click", () => {
         select.innerHTML += `<option>${cat}</option>`;
     });
 
+
+
     let createTileDialog = document.getElementById("createTileDialog");
 
     let cancelTileBtn = document.getElementById("cancelTileBtn");
@@ -294,7 +301,9 @@ createTileBtn.addEventListener("click", () => {
             id: id++,
         };
         tilesList.push(newTile)
-        renderEngine(root).to("div", "id", id).render(Card(newTile));
+
+
+        renderEngine(tilesContainer).to("div", "class", "tile").render(Card(newTile));
         createTileDialog.close();
         root.removeChild(createTileDialog);
     });
