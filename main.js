@@ -30,9 +30,9 @@ const Card = (props) => {
       <img class="tile-img" src="${tileImg}">
       <h1 class="title">${tileName}</h1>
       <p class="tile-url"><a href="${tileUrl}" target="_blank">${tileUrl}</a></p>
-      <p>Category: ${tileCategory}</p>
+      <p><strong>Category:</strong></p><p> ${tileCategory}</p>
       <p>${tileLike}</p>
-      <p>Create date: ${tileDate}</p>
+      <p><strong>Creation date:</strong></p><p> ${tileDate}</p>
       
 
       <button class="actionBtn">
@@ -283,7 +283,7 @@ createTileBtn.addEventListener("click", () => {
         const tileCategory = document.getElementById("selectCategory").value;
         const tileImg = document.getElementById("tileImg").value;
         const tileLike = document.querySelector('[name="like"]').checked;
-        let date = new Date().toDateString();
+        let date = new Date().toLocaleDateString();
 
         let newTile = {
             tileName: tileName,
