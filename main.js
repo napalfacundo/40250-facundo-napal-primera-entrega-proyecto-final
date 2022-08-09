@@ -70,27 +70,13 @@ var array = localStorage.getItem('myArray');
 array = JSON.parse(array);
 
 localStorage.setItem('myArray', JSON.stringify(array));
+*/
 
-/**
- * VARIABLES
- */
+
+/** 
+ *  CATEGORIES CONTAINERS
+ */ 
 let catList = []
-let tilesList = []
-// function checkCatList() {
-//   if (localStorage.getItem('Categories')) {
-//     catList = JSON.parse(localStorage.getItem('Categories'))
-//     console.log(typeof catList);
-    
-//   } else {
-//     catList = []
-//     console.log(typeof catList);
-//   }
-// }
-
-// checkCatList()
-
-// checkAndParseArrFromStorage(catList)
-console.log(catList)
 
 const root = document.getElementById("root"); // captures root element
 let catMenu = document.createElement("menu"); // creates category buttons catMenu
@@ -98,7 +84,7 @@ let catMenu = document.createElement("menu"); // creates category buttons catMen
 let catListContainer = document.createElement("container"); // creates a categories list container
 catListContainer.setAttribute("id", "catListContainer");
 
-let catListContainerList = document.createElement("ul");
+let catListContainerList = document.createElement("ul"); // creates list element to show categories
 catListContainer.appendChild(catListContainerList);
 root.appendChild(catListContainer);
 
@@ -179,8 +165,7 @@ deleteCatBtn.addEventListener("click", () => {
     deleteCatDialog.showModal();
 
     let deleteCatBtnDialog = document.getElementById("deleteCatBtnDialog");
-    console.log(deleteCatBtnDialog);
-
+    
     deleteCatBtnDialog.addEventListener("click", () => {
         let deleteCatInput = document.getElementById("deleteCatInput").value;
 
@@ -222,6 +207,7 @@ showCatBtn.addEventListener("click", () => {
 /**
  * TILES MENU
  */
+let tilesList = []
 let id = 0;
 
 let tilesMenu = document.createElement("menu"); // creating tiles buttons menu
@@ -231,6 +217,15 @@ renderEngine(tilesMenu)
     .render("Create Tile");
 
 root.appendChild(tilesMenu);
+
+/**
+ * CREATE TILE
+ */
+
+
+//  renderEngine(tilesContainer)
+//  .to("div", "id", "tilesContainer")
+// //  .render("Create Tile");
 
 let createTileBtn = document.getElementById("createTileBtn");
 
@@ -264,13 +259,11 @@ createTileBtn.addEventListener("click", () => {
         );
 
     catList = JSON.parse(localStorage.getItem('Categories'))
-
+    // catList ? catList : catlist = JSON.parse(localStorage.getItem('Categories'))
     let select = document.getElementById("selectCategory");
       catList.forEach((cat) => {
         select.innerHTML += `<option>${cat}</option>`;
     });
-
-
 
     let createTileDialog = document.getElementById("createTileDialog");
 
@@ -283,6 +276,7 @@ createTileBtn.addEventListener("click", () => {
     createTileDialog.showModal();
 
     let createTileBtnDialog = document.getElementById("createTileBtnDialog");
+    
     createTileBtnDialog.addEventListener("click", () => {
         const tileName = document.getElementById("tileName").value;
         const tileUrl = document.getElementById("tileUrl").value;
@@ -301,6 +295,7 @@ createTileBtn.addEventListener("click", () => {
             id: id++,
         };
         tilesList.push(newTile)
+        localStorage.setItem('Tiles', JSON.stringify(tilesList))
 
 
         renderEngine(tilesContainer).to("div", "class", "tile").render(Card(newTile));
@@ -308,3 +303,59 @@ createTileBtn.addEventListener("click", () => {
         root.removeChild(createTileDialog);
     });
 });
+
+/**
+ * DELETE TILE
+ */
+
+renderEngine(tilesMenu)
+    .to("button", "id", "deleteTileBtn")
+    .render("Delete Tile");
+
+let deleteTileBtn = document.getElementById('deleteTileBtn')
+
+deleteTileBtn.addEventListener("click", () => {
+    tilesList = JSON.parse(localStorage.getItem('Tiles'))
+    let mappedTilesList = tilesList.map((tile) => {
+        return tile.tileName
+    })
+    renderEngine(root)
+    .to("dialog", "id", "deleteTileDialog")
+    .render(
+        `
+        <span id="tilesSpanList">Tiles: ${mappedTilesList}
+        <input type="text" id="deleteTileInput" placeholder="Delete Tile">
+        <button id="deleteTileBtnDialog">Ok</button>
+        <button id="cancelDeleteTileBtn">Cancel</button>
+        `
+    )
+
+    let deleteTileDialog = document.getElementById("deleteTileDialog")
+
+    let cancelDeleteTileBtn = document.getElementById("cancelDeleteTileBtn")
+    cancelDeleteTileBtn.addEventListener("click", () => {
+        deleteTileDialog.close();
+        root.removeChild(deleteTileDialog)
+    })
+
+    deleteTileDialog.showModal();
+
+    let deleteTileBtnDialog = document.getElementById("deleteTileBtnDialog")
+
+    deleteTileBtnDialog.addEventListener("click", () => {
+        let deleteTileInput = document.getElementById("deleteTileInput").value
+
+        removeItemFromArr(tilesList, deleteTileInput)
+
+        localStorage.setItem('Tiles', JSON.stringify(tilesList))
+
+        let tilesSpanList = document.getElementById("tilesSpanList")
+        tilesSpanList.innerHTML = `Tiles: ${tilesList}`
+        deleteTileDialog.close()
+        root.removeChild(deleteTileDialog)
+    })
+})
+
+
+
+

@@ -11,7 +11,7 @@
 }
 
 .tile-img {
-  min-width: 169px;
+  max-width: 201px;
 }
 
 #tilesContainer {
