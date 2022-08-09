@@ -8,6 +8,8 @@
   justify-content: center;
   align-items: center;
   padding-top: unset;
+  background-color: ghostwhite;
+  margin-right: 24px;
 }
 
 .tile-img {
